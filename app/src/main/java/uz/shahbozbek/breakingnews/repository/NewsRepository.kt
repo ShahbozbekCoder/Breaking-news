@@ -4,7 +4,7 @@ import uz.shahbozbek.breakingnews.api.RetrofitInstance
 import uz.shahbozbek.breakingnews.db.ArticleDatabase
 import uz.shahbozbek.breakingnews.models.Article
 
-class NewsRepository(val db: ArticleDatabase) {
+class NewsRepository(private val db: ArticleDatabase) {
 
     suspend fun getBreakingNews(countryCode: String, pageNumber: Int) =
         RetrofitInstance.api.getHeadlines(countryCode, pageNumber)

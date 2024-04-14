@@ -1,13 +1,12 @@
 package uz.shahbozbek.breakingnews.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import uz.shahbozbek.breakingnews.R
 import uz.shahbozbek.breakingnews.databinding.FragmentArticleBinding
 import uz.shahbozbek.breakingnews.ui.NewsActivity
 import uz.shahbozbek.breakingnews.ui.NewsViewModel
@@ -16,8 +15,8 @@ class ArticleFragment : Fragment() {
 
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
-    lateinit var newsViewModel: NewsViewModel
-    val args: ArticleFragmentArgs by navArgs()
+    private lateinit var newsViewModel: NewsViewModel
+    private val args: ArticleFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

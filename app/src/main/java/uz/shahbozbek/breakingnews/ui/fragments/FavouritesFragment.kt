@@ -1,12 +1,10 @@
 package uz.shahbozbek.breakingnews.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import uz.shahbozbek.breakingnews.R
 import uz.shahbozbek.breakingnews.adapters.NewsAdapter
-import uz.shahbozbek.breakingnews.databinding.FragmentArticleBinding
 import uz.shahbozbek.breakingnews.databinding.FragmentFavoritesBinding
 import uz.shahbozbek.breakingnews.ui.NewsActivity
 import uz.shahbozbek.breakingnews.ui.NewsViewModel
@@ -73,9 +70,9 @@ class FavouritesFragment : Fragment() {
             attachToRecyclerView(binding.recyclerFavourites)
         }
 
-        newsViewModel.getFavouriteNews().observe(viewLifecycleOwner, Observer {articles ->
+        newsViewModel.getFavouriteNews().observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
-        })
+        }
     }
 
     private fun setupRecyclerFavourites() {

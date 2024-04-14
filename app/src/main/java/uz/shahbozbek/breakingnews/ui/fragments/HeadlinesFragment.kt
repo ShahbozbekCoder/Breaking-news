@@ -2,7 +2,6 @@ package uz.shahbozbek.breakingnews.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,10 +26,10 @@ class HeadlinesFragment : Fragment() {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
     lateinit var newsViewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
-    lateinit var retryButton: Button
-    lateinit var errorText: TextView
-    lateinit var itemHeadlinesError: CardView
+    private lateinit var newsAdapter: NewsAdapter
+    private lateinit var retryButton: Button
+    private lateinit var errorText: TextView
+    private lateinit var itemHeadlinesError: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,30 +61,32 @@ class HeadlinesFragment : Fragment() {
             findNavController().navigate(R.id.action_headlinesFragment_to_articleFragment,bundle)
         }
 
-        newsViewModel.breakingNews.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        newsViewModel.breakingNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     hideErrorMessage()
-                    response.data?.let {newsResponse ->
+                    response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles)
-                        val totalPages = newsResponse.totalResults / uz.shahbozbek.breakingnews.util.Constants.QUERY_PAGE_SIZE
-                        isLastPage= newsViewModel.breakingNewsPage == totalPages
+                        val totalPages =
+                            newsResponse.totalResults / uz.shahbozbek.breakingnews.util.Constants.QUERY_PAGE_SIZE
+                        isLastPage = newsViewModel.breakingNewsPage == totalPages
                         if (isLastPage) {
-                            binding.recyclerHeadlines.setPadding(0,0,0,0)
+                            binding.recyclerHeadlines.setPadding(0, 0, 0, 0)
                         }
                     }
                 }
+
                 is Resource.Loading -> showProgressBar()
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let {
-                        Toast.makeText(activity, "Sorry error ${it}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "Sorry error $it", Toast.LENGTH_LONG).show()
                         showErrorMessage(it)
                     }
                 }
             }
-        })
+        }
 
         retryButton.setOnClickListener {
             newsViewModel.getBreakingNews("us")
@@ -119,7 +120,7 @@ class HeadlinesFragment : Fragment() {
         isError = true
     }
 
-    val scrollListener = object : RecyclerView.OnScrollListener(){
+    private val scrollListener = object : RecyclerView.OnScrollListener(){
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager

@@ -2,4 +2,14 @@
     <string name="app_name">Breaking News</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="favourites">Favourites.</string>
+    <string name="headlines">Headlines.</string>
+    <string name="search">Search.</string>
+    <string name="search_news">Search news...</string>
+    <string name="no_internet">No Internet</string>
+    <string name="retry">Retry</string>
+    <string name="source">SOURCE</string>
+    <string name="headlines2">Headlines</string>
+    <string name="favourites2">Favourites</string>
+    <string name="search2">Search</string>
 </resources>

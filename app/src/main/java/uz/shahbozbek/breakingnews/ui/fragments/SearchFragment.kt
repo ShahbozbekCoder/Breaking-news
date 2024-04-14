@@ -2,8 +2,6 @@ package uz.shahbozbek.breakingnews.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +21,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import uz.shahbozbek.breakingnews.R
 import uz.shahbozbek.breakingnews.adapters.NewsAdapter
-import uz.shahbozbek.breakingnews.databinding.FragmentHeadlinesBinding
 import uz.shahbozbek.breakingnews.databinding.FragmentSearchBinding
 import uz.shahbozbek.breakingnews.ui.NewsActivity
 import uz.shahbozbek.breakingnews.ui.NewsViewModel
@@ -35,10 +32,10 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     lateinit var newsViewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
-    lateinit var retryButton: Button
-    lateinit var errorText: TextView
-    lateinit var itemSearchError: CardView
+    private lateinit var newsAdapter: NewsAdapter
+    private lateinit var retryButton: Button
+    private lateinit var errorText: TextView
+    private lateinit var itemSearchError: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,30 +81,32 @@ class SearchFragment : Fragment() {
             }
         }
 
-        newsViewModel.searchingNews.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        newsViewModel.searchingNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     hideErrorMessage()
-                    response.data?.let {newsResponse ->
+                    response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles)
-                        val totalPages = newsResponse.totalResults / uz.shahbozbek.breakingnews.util.Constants.QUERY_PAGE_SIZE
-                        isLastPage= newsViewModel.searchingNewsPage == totalPages
+                        val totalPages =
+                            newsResponse.totalResults / uz.shahbozbek.breakingnews.util.Constants.QUERY_PAGE_SIZE
+                        isLastPage = newsViewModel.searchingNewsPage == totalPages
                         if (isLastPage) {
-                            binding.recyclerSearch.setPadding(0,0,0,0)
+                            binding.recyclerSearch.setPadding(0, 0, 0, 0)
                         }
                     }
                 }
+
                 is Resource.Loading -> showProgressBar()
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let {
-                        Toast.makeText(activity, "Sorry error ${it}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "Sorry error $it", Toast.LENGTH_LONG).show()
                         showErrorMessage(it)
                     }
                 }
             }
-        })
+        }
 
         retryButton.setOnClickListener{
             if (binding.searchEdit.text.toString().isNotEmpty()) {
@@ -144,7 +143,7 @@ class SearchFragment : Fragment() {
         isError = true
     }
 
-    val scrollListener = object : RecyclerView.OnScrollListener() {
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager

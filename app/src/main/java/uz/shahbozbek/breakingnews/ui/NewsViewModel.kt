@@ -6,11 +6,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import uz.shahbozbek.breakingnews.api.NewsApi
 import uz.shahbozbek.breakingnews.models.Article
 import uz.shahbozbek.breakingnews.models.NewsResponse
 import uz.shahbozbek.breakingnews.repository.NewsRepository
@@ -19,18 +17,18 @@ import java.io.IOException
 
 class NewsViewModel(
     app: Application,
-    val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository
 ) : AndroidViewModel(app) {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
-    var breakingResponse: NewsResponse? = null
+    private var breakingResponse: NewsResponse? = null
 
     val searchingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchingNewsPage = 1
-    var searchingResponse: NewsResponse? = null
-    var newSearchQuery: String? = null
-    var oldSearchQuery: String? = null
+    private var searchingResponse: NewsResponse? = null
+    private var newSearchQuery: String? = null
+    private var oldSearchQuery: String? = null
 
     init {
         getBreakingNews("us")
@@ -90,7 +88,7 @@ class NewsViewModel(
         newsRepository.deleteArt(article)
     }
 
-    fun internetConnection(context: Context): Boolean {
+    private fun internetConnection(context: Context): Boolean {
         (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).apply {
             return getNetworkCapabilities(activeNetwork)?.run {
                 when {
