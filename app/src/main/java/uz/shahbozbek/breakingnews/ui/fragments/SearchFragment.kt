@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article", it)
+                putParcelable("article", it)
             }
             findNavController().navigate(R.id.action_searchFragment_to_articleFragment, bundle)
         }
