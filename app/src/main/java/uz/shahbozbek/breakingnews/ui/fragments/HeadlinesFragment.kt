@@ -56,7 +56,7 @@ class HeadlinesFragment : Fragment() {
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article",it)
+                putParcelable("article",it)
             }
             findNavController().navigate(R.id.action_headlinesFragment_to_articleFragment,bundle)
         }

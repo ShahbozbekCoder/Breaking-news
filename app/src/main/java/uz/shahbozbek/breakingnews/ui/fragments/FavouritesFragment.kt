@@ -40,7 +40,7 @@ class FavouritesFragment : Fragment() {
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("article",it)
+                putParcelable("article",it)
             }
             findNavController().navigate(R.id.action_favouritesFragment_to_articleFragment,bundle)
         }
