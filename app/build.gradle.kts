@@ -52,6 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     // Architectural Components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     // Room

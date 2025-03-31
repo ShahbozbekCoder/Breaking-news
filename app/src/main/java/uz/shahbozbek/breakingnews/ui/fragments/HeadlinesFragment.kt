@@ -11,9 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.coroutines.launch
 import uz.shahbozbek.breakingnews.R
 import uz.shahbozbek.breakingnews.adapters.NewsAdapter
 import uz.shahbozbek.breakingnews.databinding.FragmentHeadlinesBinding
@@ -50,6 +53,7 @@ class HeadlinesFragment : Fragment() {
 
         retryButton = myView.findViewById(R.id.retryButton)
         errorText = myView.findViewById(R.id.errorText)
+
 
         newsViewModel = (activity as NewsActivity).newsViewModel
         setupHeadlinesRecycler()
@@ -89,8 +93,19 @@ class HeadlinesFragment : Fragment() {
         }
 
         retryButton.setOnClickListener {
-            newsViewModel.getBreakingNews("us")
-            Toast.makeText(requireContext(), "We've touched!", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                newsViewModel.getBreakingNews("us")
+                Toast.makeText(requireContext(), "We've touched!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                binding.swipeRefreshLayout.isRefreshing = true
+                newsViewModel.getBreakingNews("us")
+                Toast.makeText(requireContext(), "We've touched!", Toast.LENGTH_SHORT).show()
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
